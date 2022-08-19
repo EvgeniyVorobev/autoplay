@@ -8,6 +8,7 @@
     <title>Document</title>
 </head>
 <body>
+<div id="test">ID</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <style>
@@ -47,31 +48,34 @@
 <div class="pausePlay">pause</div>
 
 <script>
-    jQuery(() => {
-        const song_url = 'https://botvinov.pro/wp-content/uploads/2022/08/sound.mp3';
-        const audio = new Audio(song_url);
-        var stop = document.getElementsByClassName('stopPlay')[0];
-        var pause = document.getElementsByClassName('pausePlay')[0];
-        var start = document.getElementsByClassName('startPlay')[0];
-        var it = 0;
-        // Кнопка в меню.
-        jQuery('.oxy-nav-menu-list').append(`<div id="player-container"><div id="play-pause" class="play">Play</div></div>`);
-        jQuery('body').append(`<div id="player-container"><div id="play-pause" class="play">Play</div></div>`);
-        var controlBtn = document.getElementById('play-pause');
-        function playPause() {
-            if (audio.paused) {
-                audio.play();
-                controlBtn.className = "pause";
-            } else {
-                audio.pause();
-                controlBtn.className = "play";
-            }
-        }
-        audio.addEventListener("canplaythrough", event => {
-            // отрабатывае когда аудио полностью прогружено
+    const song_url = 'https://botvinov.pro/wp-content/uploads/2022/08/sound.mp3';
+    const audio = new Audio(song_url);
+
+    var chkReadyState = setInterval(function() {
+        if (document.readyState == "complete") {
             audio.loop = true;
+            audio.autoplay = true;
+            var stop = document.getElementsByClassName('stopPlay')[0];
+            var pause = document.getElementsByClassName('pausePlay')[0];
+            var start = document.getElementsByClassName('startPlay')[0];
+            var it = 0;
+            // Кнопка в меню.
+            jQuery('.oxy-nav-menu-list').append(`<div id="player-container"><div id="play-pause" class="play">Play</div></div>`);
+
+            jQuery('body').append(`<div id="player-container"><div id="play-pause" class="play">Play</div></div>`);
+            var controlBtn = document.getElementById('play-pause');
+
+            function playPause() {
+                if (audio.paused) {
+                    audio.play();
+                    controlBtn.className = "pause";
+                } else {
+                    audio.pause();
+                    controlBtn.className = "play";
+                }
+            }
+
             document.addEventListener('click', () => {
-                console.log('clicked');
                 if (it == 0) {
                     audio.play();
                     controlBtn.className = "pause";
@@ -80,37 +84,51 @@
                     return false;
                 }
             });
-        });
 
-        if (!!stop) {
-            stop.addEventListener('click', e => {
-                if (e.target.className == 'stopPlay') {
-                    sound.pause();
-                    sound.currentTime = 0;
-                    controlBtn.className = "play";
-                }
-            })
-        }
-        if (!!pause) {
-            pause.addEventListener('click', e => {
-                if (e.target.className == 'pausePlay') {
-                    audio.pause();
-                    controlBtn.className = "play";
-                }
-            })
-        }
-        if (!!start) {
-            start.addEventListener('click', e => {
-                if (e.target.className == 'startPlay') {
+
+            document.getElementById('test').addEventListener('click', () => {
+                if (it == 0) {
                     audio.play();
                     controlBtn.className = "pause";
+                    it++;
+                } else {
+                    return false;
                 }
-            })
+            });
+
+            if (!!stop) {
+                stop.addEventListener('click', e => {
+                    if (e.target.className == 'stopPlay') {
+                        sound.pause();
+                        sound.currentTime = 0;
+                        controlBtn.className = "play";
+                    }
+                })
+            }
+            if (!!pause) {
+                pause.addEventListener('click', e => {
+                    if (e.target.className == 'pausePlay') {
+                        audio.pause();
+                        controlBtn.className = "play";
+                    }
+                })
+            }
+            if (!!start) {
+                start.addEventListener('click', e => {
+                    if (e.target.className == 'startPlay') {
+                        audio.play();
+                        controlBtn.className = "pause";
+                    }
+                })
+            }
+            if (!!controlBtn) {
+                controlBtn.addEventListener("click", playPause);
+            }
+            clearInterval(chkReadyState);
         }
-        if (!!controlBtn) {
-            controlBtn.addEventListener("click", playPause);
-        }
-    })
+    }, 100);
+
+
 </script>
 </body>
 </html>
