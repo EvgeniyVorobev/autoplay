@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<style>
+    #player-container #play-pause {
+        cursor: pointer;
+        text-indent: -999999px;
+        height: 27px;
+        width: 25px;
+        padding: 12px 18px;
+        z-index: 2;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMiAyNHYtMjRsMjAgMTItMjAgMTJ6Ii8+PC9zdmc+);
+        background-repeat: no-repeat !important;
+        background-position: center;
+        background-size: 16px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 13px;
+        background-color: #cbcac4;
+    }
+
+    .play {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMiAyNHYtMjRsMjAgMTItMjAgMTJ6Ii8+PC9zdmc+);
+    }
+
+    .pause {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTAgMjRoLTZ2LTI0aDZ2MjR6bTEwLTI0aC02djI0aDZ2LTI0eiIvPjwvc3ZnPg==) !important;
+    }
+
+    #player-container {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+<div class="stopPlay">stop</div>
+<div class="startPlay">play</div>
+<div class="pausePlay">pause</div>
+
+<script>
+    jQuery(() => {
+        const song_url = 'https://botvinov.pro/wp-content/uploads/2022/08/sound.mp3';
+        const audio = new Audio(song_url);
+        var stop = document.getElementsByClassName('stopPlay')[0];
+        var pause = document.getElementsByClassName('pausePlay')[0];
+        var start = document.getElementsByClassName('startPlay')[0];
+        var it = 0;
+        // Кнопка в меню.
+        jQuery('.oxy-nav-menu-list').append(`<div id="player-container"><div id="play-pause" class="play">Play</div></div>`);
+        jQuery('body').append(`<div id="player-container"><div id="play-pause" class="play">Play</div></div>`);
+        var controlBtn = document.getElementById('play-pause');
+        function playPause() {
+            if (audio.paused) {
+                audio.play();
+                controlBtn.className = "pause";
+            } else {
+                audio.pause();
+                controlBtn.className = "play";
+            }
+        }
+        audio.addEventListener("canplaythrough", event => {
+            // отрабатывае когда аудио полностью прогружено
+            audio.loop = true;
+            document.addEventListener('click', () => {
+                console.log('clicked');
+                if (it == 0) {
+                    audio.play();
+                    controlBtn.className = "pause";
+                    it++;
+                } else {
+                    return false;
+                }
+            });
+        });
+
+        if (!!stop) {
+            stop.addEventListener('click', e => {
+                if (e.target.className == 'stopPlay') {
+                    sound.pause();
+                    sound.currentTime = 0;
+                    controlBtn.className = "play";
+                }
+            })
+        }
+        if (!!pause) {
+            pause.addEventListener('click', e => {
+                if (e.target.className == 'pausePlay') {
+                    audio.pause();
+                    controlBtn.className = "play";
+                }
+            })
+        }
+        if (!!start) {
+            start.addEventListener('click', e => {
+                if (e.target.className == 'startPlay') {
+                    audio.play();
+                    controlBtn.className = "pause";
+                }
+            })
+        }
+        if (!!controlBtn) {
+            controlBtn.addEventListener("click", playPause);
+        }
+    })
+</script>
+</body>
+</html>
